@@ -1,0 +1,29 @@
+{
+    "name": "madeiramadeirabr/lib-php-health-check",
+    "description": "Biblioteca que implementa a RFC de health check em PHP",
+    "type": "library",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Lucas Block",
+            "email": "lucas.villatore@madeiramadeira.com.br"
+        }
+    ],
+    "require": {
+        "php": "7.1 - 8.2",
+        "ext-json": "*"
+    },
+    "require-dev": {
+		"phpunit/phpunit": "7.0 - 10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MadeiraMadeira\\HealthCheck\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }	
+}

@@ -1,0 +1,25 @@
+name: ci tests
+
+on:
+  pull_request:
+    branches:
+      - production
+    
+jobs:
+  run_tests:    
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
+    name: PHP ${{ matrix.php-versions }} ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+    - name: Composer install
+      run: composer install
+    - name: run tests
+      run: ./vendor/bin/phpunit --no-configuration ./tests --colors --bootstrap vendor/autoload.php
