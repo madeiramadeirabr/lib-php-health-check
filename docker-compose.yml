@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  php:
+    container_name: lib-php-logger
+    build:
+      context: .
+      dockerfile: ./docker/php8.1/Dockerfile
+    volumes:
+      - .:/app
+    user: $UID:$GID
