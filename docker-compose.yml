@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   php:
-    container_name: lib-php-logger
+    container_name: lib-php-health-check
     build:
       context: .
       dockerfile: ./docker/php8.1/Dockerfile
