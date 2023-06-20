@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: lib-php-health-check 
+  annotations:
+    github.com/project-slug: madeiramadeirabr/lib-php-health-check 
+    sonarqube.org/project-key: madeiramadeirabr/lib-php-health-check 
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/squad-sre
