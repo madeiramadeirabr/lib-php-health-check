@@ -13,7 +13,6 @@ class SetDependenciesUseCase extends UseCase
 
     public function execute($data = array())
     {
-        //validate dependency
         $this->repository->setDependencies($data);
     }
 }

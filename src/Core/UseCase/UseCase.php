@@ -1,12 +1,13 @@
 <?php
 
 namespace MadeiraMadeira\HealthCheck\Core\UseCase;
-use Exception;
+
+use MadeiraMadeira\HealthCheck\Core\Exceptions\UseCaseNotImplementedException;
 
 class UseCase
 {
     public function execute($data = array())
     {
-        throw new Exception("Use case not implemented");
+        throw new UseCaseNotImplementedException("Use case not implemented");
     }
 }

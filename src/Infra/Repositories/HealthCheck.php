@@ -2,12 +2,16 @@
 
 namespace MadeiraMadeira\HealthCheck\Infra\Repositories;
 
-use MadeiraMadeira\HealthCheck\Core\Entities\System;
+use MadeiraMadeira\HealthCheck\Core\Entities\Status;
 use MadeiraMadeira\HealthCheck\Core\Repositories\HealthCheckRepository;
 
 class HealthCheck implements HealthCheckRepository
 {
     private $cache;
+
+    private $dependenciesKey = 'dependencies';
+
+    private $basicInfoKey = 'basic-info';
 
     public function __construct($cache)
     {
@@ -16,51 +20,117 @@ class HealthCheck implements HealthCheckRepository
 
     public function setDependencies(array $dependencies) 
     {
-        $this->cache->set('dependencies', $dependencies);
+        $this->cache->set($this->dependenciesKey, $dependencies);
     }
 
     public function setDependencyStatus(string $dependencyName, string $status)
     {
-        $dependencies = $this->cache->get('dependencies');
+        $dependencies = $this->cache->get($this->dependenciesKey);
         
         foreach ($dependencies as $dependency) {
-            if ($dependency['name'] == $dependencyName) {
-                $dependency['status'] = $status;
+            if ($dependency->getName() == $dependencyName) {
+                $dependency->setStatus($status);
             }
         }
 
-        $this->cache->set('dependencies', $dependencies);
+        $this->cache->set($this->dependenciesKey, $dependencies);
     }
 
     public function getHealthCheck()
     {
-        $basicInfo = $this->cache->get('basic-info');
-        $dependencies = $this->cache->get('dependencies');
+        $basicInfo = $this->cache->get($this->basicInfoKey);
+        $dependencies = $this->cache->get($this->dependenciesKey);
+        $status = $this->getHealthCheckStatus($dependencies);
         $system = $this->getSystemStatus();
-        $status = 'Healthy';
-
+        
         return [
             'name' => $basicInfo['name'],
             'version' => $basicInfo['version'],
             'system' => $system,
             'status' => $status,
             'timestamp' => date('Y-m-d H:i:s.u'),
-            'dependencies' => $dependencies
+            'dependencies' => $this->toArrayDependencies($dependencies)
         ];
     }
 
     public function setHealthCheckBasicInfo($data)
     {
-        $this->cache->set('basic-info', $data);
+        $this->cache->set($this->basicInfoKey, $data);
+    }
+
+    private function toArrayDependencies(array $dependencies)
+    {
+        $dependenciesList = [];
+
+        foreach ($dependencies as $dependency) {
+            $dependenciesList[] = $dependency->toArray();
+        }
+
+        return $dependenciesList;
+    }
+
+    private function getHealthCheckStatus(array $dependencies)
+    {
+        $status = Status::getHealthyStatus();
+
+        foreach ($dependencies as $dependency) {
+            if ($dependency->getOptional()) {
+                continue;
+            }
+
+            if ($dependency->getStatus() == Status::getUnavailiableStatus()) {
+                $status = Status::getUnavailiableStatus();
+                break;
+            }
+
+            if ($dependency->getStatus() == Status::getUnhealthyStatus()) {
+                $status = Status::getUnhealthyStatus();
+            }
+        }
+
+        return $status;
     }
 
     private function getSystemStatus()
     {
-        $system = (new System())
-                    ->getCPUInfo()
-                    ->getMemoryInfo()
-                    ->build();
+        $systemStatus = [
+            'cpu' => [
+                'utilization' => $this->getCPUUtilization()
+            ],
+            'memory' => $this->getServerMemoryUsage()
+        ];
 
-        return $system;
+        return $systemStatus;
+    }
+
+    private function getCPUUtilization()
+    {
+        $coreNumbers = 1;
+
+        if(is_file('/proc/cpuinfo')) {
+            $cpuInfo = file_get_contents('/proc/cpuinfo');
+            preg_match_all('/^processor/m', $cpuInfo, $matches);
+            $coreNumbers = count($matches[0]);
+        }
+    
+        $cpuUtilization = sys_getloadavg()[0];
+        
+        return $cpuUtilization / $coreNumbers;
+    }
+
+    private function getServerMemoryUsage()
+    {
+        $free = shell_exec('free --mega');
+        $free = (string)trim($free);
+        $free_arr = explode("\n", $free);
+    
+        $memory = explode(" ", $free_arr[1]);
+        $memory = array_filter($memory);
+        $memory = array_merge($memory);
+    
+        return [
+            'total' => (int)$memory[1],
+            'used' => (int)$memory[2]
+        ];
     }
 }
