@@ -120,17 +120,17 @@ class HealthCheck implements HealthCheckRepository
 
     private function getServerMemoryUsage()
     {
-        $free = shell_exec('free --mega');
-        $free = (string)trim($free);
-        $free_arr = explode("\n", $free);
+        // $free = shell_exec('free --mega');
+        // $free = (string)trim($free);
+        // $free_arr = explode("\n", $free);
     
-        $memory = explode(" ", $free_arr[1]);
-        $memory = array_filter($memory);
-        $memory = array_merge($memory);
+        // $memory = explode(" ", $free_arr[1]);
+        // $memory = array_filter($memory);
+        // $memory = array_merge($memory);
     
-        return [
-            'total' => (int)$memory[1],
-            'used' => (int)$memory[2]
-        ];
+        // return [
+        //     'total' => (int)$memory[1],
+        //     'used' => (int)$memory[2]
+        // ];
     }
 }

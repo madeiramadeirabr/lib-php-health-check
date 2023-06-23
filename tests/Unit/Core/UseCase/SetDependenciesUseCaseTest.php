@@ -2,11 +2,10 @@
 
 namespace Tests\Unit\Core\UseCase;
 
-use MadeiraMadeira\HealthCheck\Core\Entities\Dependency;
-use MadeiraMadeira\HealthCheck\Core\Entities\Kind;
 use MadeiraMadeira\HealthCheck\Core\Repositories\HealthCheckRepository;
 use MadeiraMadeira\HealthCheck\Core\UseCase\SetDependenciesUseCase;
 use PHPUnit\Framework\TestCase;
+use Tests\Mock\DependencyStub;
 
 class SetDependenciesUseCaseTest extends TestCase
 {
@@ -29,35 +28,14 @@ class SetDependenciesUseCaseTest extends TestCase
         $mock = $this->getHealthCheckRepositoryMock();
         $useCase = new SetDependenciesUseCase($mock);
 
-        $data = [
-            new Dependency([
-                'name' => 'dependency 1',
-                'kind' => Kind::getMysqlKind(),
-                'optional' => true,
-                'internal' => true,
-            ]),
+        $dependenciesStub = (new DependencyStub())->getDependenciesHealthy();
         
-            new Dependency([
-                'name' => 'dependency 2',
-                'kind' => Kind::getMysqlKind(),
-                'optional' => false,
-                'internal' => true,
-            ]),
-            
-            new Dependency([
-                'name' => 'dependency 3',
-                'kind' => Kind::getMysqlKind(),
-                'optional' => false,
-                'internal' => true,
-            ])
-        ];
-
         $mock->expects($this->once())
             ->method('setDependencies')
             ->with(
-                $data
+                $dependenciesStub
             );
         
-        $useCase->execute($data);
+        $useCase->execute($dependenciesStub);
     }
 }

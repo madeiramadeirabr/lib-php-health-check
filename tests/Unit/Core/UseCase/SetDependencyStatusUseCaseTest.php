@@ -3,9 +3,10 @@
 namespace Tests\Unit\Core\UseCase;
 
 use MadeiraMadeira\HealthCheck\Core\Exceptions\UnexpectedStatusException;
-use PHPUnit\Framework\TestCase;
 use MadeiraMadeira\HealthCheck\Core\Repositories\HealthCheckRepository;
 use MadeiraMadeira\HealthCheck\Core\UseCase\SetDependencyStatusUseCase;
+use PHPUnit\Framework\TestCase;
+use Tests\Mock\DependencyStub;
 
 class SetDependencyStatusUseCaseTest extends TestCase
 {
@@ -28,10 +29,7 @@ class SetDependencyStatusUseCaseTest extends TestCase
         $mock = $this->getHealthCheckRepositoryMock();
         $useCase = new SetDependencyStatusUseCase($mock);
 
-        $data = [
-            'dependencyName' => 'dependency',
-            'status' => 'Healthy'
-        ];
+        $data = (new DependencyStub())->getValidDependencyData();
 
         $mock->expects($this->once())
             ->method('setDependencyStatus')
@@ -48,10 +46,7 @@ class SetDependencyStatusUseCaseTest extends TestCase
         $mock = $this->getHealthCheckRepositoryMock();
         $useCase = new SetDependencyStatusUseCase($mock);
 
-        $data = [
-            'dependencyName' => 'dependency',
-            'status' => 'Unexpected status'
-        ];
+        $data = (new DependencyStub())->getInvalidDependencyData();
 
         $this->expectException(UnexpectedStatusException::class);
 

@@ -6,8 +6,9 @@ use MadeiraMadeira\HealthCheck\Core\Exceptions\BasicInfoException;
 use MadeiraMadeira\HealthCheck\Core\Repositories\HealthCheckRepository;
 use MadeiraMadeira\HealthCheck\Core\UseCase\SetHealthCheckBasicInfo;
 use PHPUnit\Framework\TestCase;
+use Tests\Mock\HealthCheckStub;
 
-class SetHealthCeckBasicInfoTest extends TestCase
+class SetHealthCheckBasicInfoTest extends TestCase
 {
 
     private function getHealthCheckRepositoryMock()
@@ -29,18 +30,15 @@ class SetHealthCeckBasicInfoTest extends TestCase
         $mock = $this->getHealthCheckRepositoryMock();
         $useCase = new SetHealthCheckBasicInfo($mock);
 
-        $data = [
-            'name' => 'test',
-            'version' => '123'
-        ];
+        $basicInfoStub = (new HealthCheckStub())->getBasicInfoStub();
 
         $mock->expects($this->once())
             ->method('setHealthCheckBasicInfo')
             ->with(
-                $data
+                $basicInfoStub
             );
 
-        $useCase->execute($data);
+        $useCase->execute($basicInfoStub);
     }
 
     public function testExecuteThrowingException()
@@ -48,13 +46,10 @@ class SetHealthCeckBasicInfoTest extends TestCase
         $mock = $this->getHealthCheckRepositoryMock();
         $useCase = new SetHealthCheckBasicInfo($mock);
 
-        $data = [
-            'name' => '',
-            'version' => ''
-        ];
+        $basicInfoStub = (new HealthCheckStub())->getInvalidBasicInfo();
 
         $this->expectException(BasicInfoException::class);
 
-        $useCase->execute($data);
+        $useCase->execute($basicInfoStub);
     }
 }
