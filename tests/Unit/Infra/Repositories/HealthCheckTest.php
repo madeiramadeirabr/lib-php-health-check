@@ -12,17 +12,23 @@ class HealthCheckTest extends TestCase
 {
     public function getMemoryMock()
     {
-        $builder = $this->getMockBuilder(MemoryInterface::class)
-                    ->onlyMethods([
-                        'set',
-                        'get',
-                        'all',
-                        'clear'
-                    ]);
+        $methodsList = [
+            'set',
+            'get',
+            'all',
+            'clear'
+        ];
+        $builder = $this->getMockBuilder(MemoryInterface::class);
+
+        if (version_compare(PHP_VERSION, "7.2.0") >= 0) {
+            $builder->onlyMethods($methodsList);
+        }else {
+            $builder->setMethods($methodsList);
+        }
+        
         $mock = $builder->getMock();
 
         return $mock;
-
     }
 
     public function testSetDependencies()

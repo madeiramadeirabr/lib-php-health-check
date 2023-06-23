@@ -53,7 +53,7 @@ class HealthCheck implements HealthCheckRepository
         ];
     }
 
-    public function setHealthCheckBasicInfo($data)
+    public function setHealthCheckBasicInfo(array $data)
     {
         $this->cache->set($this->basicInfoKey, $data);
     }

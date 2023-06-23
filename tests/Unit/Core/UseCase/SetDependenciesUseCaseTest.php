@@ -11,16 +11,22 @@ class SetDependenciesUseCaseTest extends TestCase
 {
     private function getHealthCheckRepositoryMock()
     {
-        $mock = $this->getMockBuilder(HealthCheckRepository::class)
-                    ->onlyMethods([
-                        'setDependencyStatus',
-                        'setDependencies',
-                        'getHealthCheck',
-                        'setHealthCheckBasicInfo'
-                    ])
-                    ->getMock();
+        $methodsList = [
+            'setDependencyStatus',
+            'setDependencies',
+            'getHealthCheck',
+            'setHealthCheckBasicInfo'
+        ];
+
+        $builder = $this->getMockBuilder(HealthCheckRepository::class);
+
+        if (version_compare(PHP_VERSION, "7.2.0") >= 0) {
+            $builder->onlyMethods($methodsList);
+        }else {
+            $builder->setMethods($methodsList);
+        }
         
-        return $mock;
+        return $builder->getMock();
     }
 
     public function testExecute()
