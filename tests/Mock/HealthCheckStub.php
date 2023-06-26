@@ -83,7 +83,7 @@ class HealthCheckStub
             'status' => $this->getStatusHealthyStub(),
             'system' => $this->getSystemStub(),
             'dependencies' => $dependencies,
-            'timestamp' => '2022-09-27 18:00:00.000' 
+            'timestamp' => $this->getTimestamp() 
         ];
 
         return $healthCheckStub;
@@ -101,7 +101,7 @@ class HealthCheckStub
             'status' => $this->getStatusUnhealthyStub(),
             'system' => $this->getSystemStub(),
             'dependencies' => $dependencies,
-            'timestamp' => '2022-09-27 18:00:00.000' 
+            'timestamp' => $this->getTimestamp() 
         ];
 
         return $healthCheckStub;
@@ -119,7 +119,7 @@ class HealthCheckStub
             'status' => $this->getStatusUnavailableStub(),
             'system' => $this->getSystemStub(),
             'dependencies' => $dependencies,
-            'timestamp' => '2022-09-27 18:00:00.000' 
+            'timestamp' =>  $this->getTimestamp()
         ];
 
         return $healthCheckStub;
@@ -131,5 +131,10 @@ class HealthCheckStub
             'name' => '',
             'version' => ''
         ];
+    }
+
+    public function getTimestamp()
+    {
+        return '2022-09-27 18:00:00.000';
     }
 }
