@@ -4,16 +4,16 @@ namespace MadeiraMadeira\HealthCheck\Core\Entities;
 
 class Status
 {
-    private static $healthy = 'Healthy';
+    private static $healthy = 'healthy';
 
-    private static $unhealthy = 'Unhealthy';
+    private static $unhealthy = 'unhealthy';
 
-    private static $unavailiable = 'Unavailiable';
+    private static $unavailiable = 'unavailiable';
 
     private static $availableStatuses = [
-        'Healthy',
-        'Unhealthy',
-        'Unavailiable'
+        'healthy',
+        'unhealthy',
+        'unavailiable'
     ];
 
     public static function isValidStatus(string $status)

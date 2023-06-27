@@ -4,37 +4,37 @@ namespace MadeiraMadeira\HealthCheck\Core\Entities;
 
 class Kind
 {
-    private static $webservice = 'WebService';
+    private static $webservice = 'webservice';
 
-    private static $sqs = 'SQS';
+    private static $sqs = 'sqs';
 
-    private static $s3 = 'S3';
+    private static $s3 = 's3';
 
-    private static $sns = 'SNS';
+    private static $sns = 'sns';
 
-    private static $mysql = 'Mysql';
+    private static $mysql = 'mysql';
 
-    private static $postgresql = 'Postgresql';
+    private static $postgresql = 'postgresql';
 
-    private static $mongodb = 'Mongodb';
+    private static $mongodb = 'mongodb';
 
-    private static $redis = 'Redis';
+    private static $redis = 'redis';
 
-    private static $elasticsearch = 'Elasticsearch';
+    private static $elasticsearch = 'elasticsearch';
 
-    private static $other = 'Other';
+    private static $other = 'other';
 
     private static $availableKinds = [
-        'WebService',
-        'SQS',
-        'S3',
-        'SNS',
-        'Mysql',
-        'Postgresql',
-        'Mongodb',
-        'Redis',
-        'ElasticSearch',
-        'Other'
+        'webservice',
+        'sqs',
+        's3',
+        'sns',
+        'mysql',
+        'postgresql',
+        'mongodb',
+        'redis',
+        'elasticSearch',
+        'other'
     ];
 
     public static function isValidKind(string $kind)

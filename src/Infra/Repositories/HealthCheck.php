@@ -38,21 +38,37 @@ class HealthCheck implements HealthCheckRepository
 
     public function getHealthCheck()
     {
-        $basicInfo = $this->cache->get($this->basicInfoKey);
+        $this->processRunners();
+
         $dependencies = $this->cache->get($this->dependenciesKey);
-        $status = $this->getHealthCheckStatus($dependencies);
-        $system = $this->getSystemStatus();
+        $basicInfo = $this->cache->get($this->basicInfoKey);
 
         return [
             'name' => $basicInfo['name'],
             'version' => $basicInfo['version'],
-            'system' => $system,
-            'status' => $status,
+            'system' => $this->getSystemStatus(),
+            'status' => $this->getHealthCheckStatus($dependencies),
             'timestamp' => date('Y-m-d H:i:s.u'),
             'dependencies' => $this->toArrayDependencies($dependencies)
         ];
     }
 
+    private function processRunners()
+    {
+        $processedDependencies = [];
+        $dependencies = $this->cache->get($this->dependenciesKey);
+
+        foreach($dependencies as $dependency) {
+            if ($dependency->getRunner()) {
+                $dependency->setStatusByRunner();
+            }
+
+            $processedDependencies[] = $dependency;
+        }
+
+        $this->setDependencies($processedDependencies);
+    }
+    
     public function setHealthCheckBasicInfo(array $data)
     {
         $this->cache->set($this->basicInfoKey, $data);
@@ -118,6 +134,17 @@ class HealthCheck implements HealthCheckRepository
         return $cpuUtilization / $coreNumbers;
     }
 
+    // adaptado de https://www.php.net/manual/en/function.memory-get-usage.php#120665
+    private function getServerMemoryUsage()
+        {
+            $isWindows = stristr(PHP_OS, "win");
+            if ($isWindows) {
+                return $this->getWindowsMemoryUsage();
+            } 
+    
+            return $this->getLinuxMemoryUsage();
+    }
+    
     private function getWindowsMemoryUsage()
     {
 
@@ -196,14 +223,5 @@ class HealthCheck implements HealthCheckRepository
         return $memory;
     }
 
-    // adaptado de https://www.php.net/manual/en/function.memory-get-usage.php#120665
-    private function getServerMemoryUsage()
-    {
-        $isWindows = stristr(PHP_OS, "win");
-        if ($isWindows) {
-            return $this->getWindowsMemoryUsage();
-        } 
 
-        return $this->getLinuxMemoryUsage();
-    }
 }

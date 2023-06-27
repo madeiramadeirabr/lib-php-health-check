@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Infra\Repositories;
 
+use MadeiraMadeira\HealthCheck\Core\Entities\Status;
 use PHPUnit\Framework\TestCase;
 use MadeiraMadeira\HealthCheck\Infra\Repositories\HealthCheck;
 use MadeiraMadeira\HealthCheck\Infra\Datasources\Memory\Interfaces\MemoryInterface;
@@ -74,7 +75,7 @@ class HealthCheckTest extends TestCase
             );
 
         
-        $healthCheck->setDependencyStatus('key', 'Healthy');
+        $healthCheck->setDependencyStatus('key', Status::getHealthyStatus());
     }
 
     public function testSetHealthCheckBasicInfo()
@@ -104,11 +105,12 @@ class HealthCheckTest extends TestCase
 
         $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
         
-        $mock->expects($this->exactly(2))
+        $mock->expects($this->exactly(3))
         ->method('get')
         ->willReturnOnConsecutiveCalls(
-            $basicInfo,
-            $dependenciesStub
+            $dependenciesStub,
+            $dependenciesStub,
+            $basicInfo
         );
 
         $response = $healthCheck->getHealthCheck();
@@ -129,11 +131,12 @@ class HealthCheckTest extends TestCase
 
         $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
         
-        $mock->expects($this->exactly(2))
+        $mock->expects($this->exactly(3))
         ->method('get')
         ->willReturnOnConsecutiveCalls(
-            $basicInfo,
-            $dependenciesStub
+            $dependenciesStub,
+            $dependenciesStub,
+            $basicInfo
         );
 
         $response = $healthCheck->getHealthCheck();
@@ -154,11 +157,12 @@ class HealthCheckTest extends TestCase
 
         $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
         
-        $mock->expects($this->exactly(2))
+        $mock->expects($this->exactly(3))
         ->method('get')
         ->willReturnOnConsecutiveCalls(
-            $basicInfo,
-            $dependenciesStub
+            $dependenciesStub,
+            $dependenciesStub,
+            $basicInfo
         );
 
         $response = $healthCheck->getHealthCheck();
@@ -179,11 +183,12 @@ class HealthCheckTest extends TestCase
 
         $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
         
-        $mock->expects($this->exactly(2))
+        $mock->expects($this->exactly(3))
         ->method('get')
         ->willReturnOnConsecutiveCalls(
-            $basicInfo,
-            $dependenciesStub
+            $dependenciesStub,
+            $dependenciesStub,
+            $basicInfo
         );
 
         $response = $healthCheck->getHealthCheck();

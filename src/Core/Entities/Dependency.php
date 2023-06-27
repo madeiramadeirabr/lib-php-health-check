@@ -2,6 +2,8 @@
 
 namespace MadeiraMadeira\HealthCheck\Core\Entities;
 
+use MadeiraMadeira\HealthCheck\Core\Repositories\RunnerRepository;
+
 class Dependency
 {
     private $name;
@@ -14,6 +16,8 @@ class Dependency
 
     private $isOptional;
 
+    private $runner;
+
     public function __construct($args)
     {
         $this->setName($args['name']);
@@ -21,9 +25,14 @@ class Dependency
         $this->setInternal($args['internal']);
         $this->setOptional($args['optional']);
         $this->setStatus(Status::getHealthyStatus());
+        $this->setRunner(null);
 
         if (!empty($args['status']) && Status::isValidStatus($args['status'])) {
             $this->setStatus($args['status']);
+        }
+
+        if (!empty($args['runner']) && $args['runner'] instanceof RunnerRepository) {
+            $this->setRunner($args['runner']);
         }
     
     }
@@ -52,6 +61,16 @@ class Dependency
         $this->isOptional = $isOptional;
     }
 
+    public function setRunner($runner)
+    {
+        $this->runner = $runner;
+    }
+
+    public function getRunner()
+    {
+        return $this->runner;
+    }
+    
     public function getName()
     {
         return $this->name;
@@ -77,6 +96,17 @@ class Dependency
         return $this->status;
     }
     
+    public function setStatusByRunner()
+    {
+        $status = $this->runner->getStatus();
+
+        if (!Status::isValidStatus($status)) {
+            $status = '';
+        }
+
+        $this->setStatus($status);
+    }
+
     public function toArray()
     {
         return [

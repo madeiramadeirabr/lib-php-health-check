@@ -92,7 +92,7 @@ class DependencyStub
     {
         return [
             'dependencyName' => 'dependency',
-            'status' => 'Healthy'
+            'status' => Status::getHealthyStatus()
         ];
     }
 
