@@ -25,5 +25,9 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit --colors",
+        "test:coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --colors --coverage-html ./reports"
     }	
 }
