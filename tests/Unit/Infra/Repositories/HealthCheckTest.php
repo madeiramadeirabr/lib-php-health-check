@@ -101,7 +101,7 @@ class HealthCheckTest extends TestCase
         $healthCheck = new HealthCheck($mock);
 
         $dependenciesStub = (new DependencyStub())->getDependenciesHealthy();
-        $healthCheckStub = (new HealthCheckStub())->getHealthCheckHealthyStub();
+        $healthCheckStub = (new HealthCheckStub())->getHealthCheckStub();
 
         $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
         
@@ -179,7 +179,85 @@ class HealthCheckTest extends TestCase
         $healthCheck = new HealthCheck($mock);
 
         $dependenciesStub = (new DependencyStub())->getDependenciesOptionalUnavailable();
-        $healthCheckStub = (new HealthCheckStub())->getHealthCheckHealthyStub($dependenciesStub);
+        $healthCheckStub = (new HealthCheckStub())->getHealthCheckStub($dependenciesStub);
+
+        $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
+        
+        $mock->expects($this->exactly(3))
+        ->method('get')
+        ->willReturnOnConsecutiveCalls(
+            $dependenciesStub,
+            $dependenciesStub,
+            $basicInfo
+        );
+
+        $response = $healthCheck->getHealthCheck();
+
+        $this->assertEquals($response['name'], $healthCheckStub['name']);
+        $this->assertEquals($response['version'], $healthCheckStub['version']);
+        $this->assertEquals($response['status'], $healthCheckStub['status']);
+        $this->assertEquals($response['dependencies'], $healthCheckStub['dependencies']);
+    }
+
+    public function testGetHealthCheckDependencyWithRunner()
+    {
+        $mock = $this->getMemoryMock();
+        $healthCheck = new HealthCheck($mock);
+
+        $dependenciesStub = (new DependencyStub())->getDependenciesWithRunner();
+        $healthCheckStub = (new HealthCheckStub())->getHealthCheckStub($dependenciesStub);
+
+        $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
+        
+        $mock->expects($this->exactly(3))
+        ->method('get')
+        ->willReturnOnConsecutiveCalls(
+            $dependenciesStub,
+            $dependenciesStub,
+            $basicInfo
+        );
+
+        $response = $healthCheck->getHealthCheck();
+
+        $this->assertEquals($response['name'], $healthCheckStub['name']);
+        $this->assertEquals($response['version'], $healthCheckStub['version']);
+        $this->assertEquals($response['status'], $healthCheckStub['status']);
+        $this->assertEquals($response['dependencies'], $healthCheckStub['dependencies']);
+    }
+
+    public function testGetHealthCheckDependencyWithRunnerUnhealthy()
+    {
+        $mock = $this->getMemoryMock();
+        $healthCheck = new HealthCheck($mock);
+
+        $dependenciesStub = (new DependencyStub())->getDependenciesWithRunnerUnhealthy();
+        $healthCheckStub = (new HealthCheckStub())->getHealthCheckUnhealthyStub();
+
+        $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
+        
+        $mock->expects($this->exactly(3))
+        ->method('get')
+        ->willReturnOnConsecutiveCalls(
+            $dependenciesStub,
+            $dependenciesStub,
+            $basicInfo
+        );
+
+        $response = $healthCheck->getHealthCheck();
+
+        $this->assertEquals($response['name'], $healthCheckStub['name']);
+        $this->assertEquals($response['version'], $healthCheckStub['version']);
+        $this->assertEquals($response['status'], $healthCheckStub['status']);
+        $this->assertEquals($response['dependencies'], $healthCheckStub['dependencies']);
+    }
+
+    public function testGetHealthCheckDependencyWithRunnerUnavaiable()
+    {
+        $mock = $this->getMemoryMock();
+        $healthCheck = new HealthCheck($mock);
+
+        $dependenciesStub = (new DependencyStub())->getDependenciesWithRunnerUnavaiable();
+        $healthCheckStub = (new HealthCheckStub())->getHealthCheckUnavailableStub();
 
         $basicInfo = (new HealthCheckStub())->getBasicInfoStub();
         

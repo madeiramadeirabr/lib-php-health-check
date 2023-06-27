@@ -71,7 +71,7 @@ class HealthCheckStub
         ];
     }
 
-    public function getHealthCheckHealthyStub($dependencies = null)
+    public function getHealthCheckStub($dependencies = null)
     {
         $basicInfo = $this->getBasicInfoStub();
         $dependencies = !$dependencies ? $this->getDependenciesHealthyStub() : $dependencies;
@@ -89,10 +89,10 @@ class HealthCheckStub
         return $healthCheckStub;
     }
 
-    public function getHealthCheckUnhealthyStub()
+    public function getHealthCheckUnhealthyStub($dependencies = null)
     {
         $basicInfo = $this->getBasicInfoStub();
-        $dependencies = $this->getDependenciesUnhealthyStub();
+        $dependencies = !$dependencies ? $this->getDependenciesUnhealthyStub() : $dependencies;
         $dependencies[0] = $dependencies[0]->toArray();
 
         $healthCheckStub = [
@@ -107,10 +107,10 @@ class HealthCheckStub
         return $healthCheckStub;
     }
 
-    public function getHealthCheckUnavailableStub()
+    public function getHealthCheckUnavailableStub($dependencies = null)
     {
         $basicInfo = $this->getBasicInfoStub();
-        $dependencies = $this->getDependenciesUnavailableStub();
+        $dependencies = !$dependencies ? $this->getDependenciesUnavailableStub() : $dependencies;
         $dependencies[0] = $dependencies[0]->toArray();
 
         $healthCheckStub = [
