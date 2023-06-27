@@ -18,6 +18,6 @@ RUN pecl channel-update pecl.php.net \
 	&& pecl install xdebug-2.7.0 \
 	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
+RUN docker-php-ext-enable xdebug
 
 COPY ./docker/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
