@@ -5,7 +5,9 @@ services:
     container_name: lib-php-health-check
     build:
       context: .
-      dockerfile: ./docker/php7.1/Dockerfile
+      dockerfile: ./docker/php8.1/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - .:/app
     user: $UID:$GID
