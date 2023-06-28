@@ -3,22 +3,16 @@
 Nessa documentação temos:
 - [Usando a biblioteca](#usando-a-biblioteca)
   - [Descrição](#descrição)
-  - [Registrar de informações básicas](#registrar-de-informações-básicas)
-  - [Registrar de dependências](#registrar-de-dependências)
+  - [Registrando as informações básicas](#registrando-as-informações-básicas)
+  - [Registrando as dependências](#registrando-as-dependências)
+  - [Alterar status das dependências](#alterar-status-das-dependências)
   - [Exemplo de uso](#exemplo-de-uso)
 
 ## Descrição
 
-o que é
-descrição da rfc
-informações de sistema
-informações das dependências
-    - kind
-    - status
-    - internal
-    - opcional
-    - runner
-## Registrar de informações básicas
+Essa é a biblioteca que implementa a RFC de Health Check. A descrição completa você pode encontrar nesse [link](https://github.com/madeiramadeirabr/mmrfc/blob/main/rfcs/MMRFC%207%20-%20Health%20Check%20Standard.md). 
+
+## Registrando as informações básicas
 
 ```php
 <?php
@@ -33,7 +27,7 @@ $healthCheckInstance->setHealthCheckBasicInfo([
 ]);
 ```
 
-## Registrar de dependências
+## Registrando as dependências
 ```php
 
 use MadeiraMadeira\HealthCheck\Core\Entities\Dependencies;
@@ -56,10 +50,19 @@ $healthCheckInstance->setDependencies([
 ])
 ```
 
+## Alterar status das dependências
+
+A biblioteca disponibiliza duas formas de atualizar o status atual das dependências:
+
+- Forma manual
+- Por "runner"
+
 **Alterar status de forma manual:**
 
-```php
+Para alterar o status da dependência de forma manual basta chamar a função de alterar status da dependência pela instância de health check. 
 
+Exemplo:
+```php
 <?php
 
 use MadeiraMadeira\HealthCheck\Core\Entities\Status;
@@ -73,6 +76,15 @@ $healthcheckInstance->setDependencyStatus(
 
 **Alterar status por runner:**
 
+Implementar um runner para alterar de forma automática é a forma fácil de gerenciar os status das aplicações. Para utilizar esse modo precisamos:
+
+- Escrever uma classe que implementa a interface `RunnerRepository`
+- Retornar algum status disponível na classe `Status`
+- Ao setar as dependências no Health Check, deve ser repassado uma instância do `Runner` implementado.
+
+Lembrando que, o `Runner`, caso fornecido, sempre será executado ao chamar a função `getHealthCheck` da instância de Health Check.
+
+Exemplo:
 ```php
 <?php
 
