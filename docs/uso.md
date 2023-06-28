@@ -82,7 +82,7 @@ Implementar um runner para alterar de forma automática é a forma fácil de ger
 - Retornar algum status disponível na classe `Status`
 - Ao setar as dependências no Health Check, deve ser repassado uma instância do `Runner` implementado.
 
-Lembrando que, o `Runner`, caso fornecido, sempre será executado ao chamar a função `getHealthCheck` da instância de Health Check.
+Lembrando que o `Runner`, caso fornecido, sempre será executado ao chamar a função `getHealthCheck` da instância de Health Check.
 
 Exemplo:
 ```php
