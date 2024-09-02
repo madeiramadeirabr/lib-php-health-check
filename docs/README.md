@@ -13,3 +13,5 @@ Todas as versões são garantidas por testes unitários que são testados no mom
 - [x] PHP 7.4
 - [x] PHP 8.0
 - [x] PHP 8.1
+- [x] PHP 8.2
+- [x] PHP 8.3
